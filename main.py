@@ -1,10 +1,20 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import date
 from database import db, create_document, get_documents
 
 app = FastAPI(title="ORchestrator.ai Scheduling Engine MVP")
+
+# CORS - allow frontend to call API from browser
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In MVP, allow all. Tighten in production.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Schemas (for API validation only; database schemas live in schemas.py) ---
 class Provider(BaseModel):
